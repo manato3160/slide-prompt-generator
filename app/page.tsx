@@ -182,21 +182,41 @@ export default function SlidePromptGenerator() {
       case 2: return (
           <div className="space-y-6">
             <div className="text-center space-y-2"><Palette className="w-12 h-12 mx-auto text-green-500" /><h2 className="text-2xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">デザインを設定</h2><p className="text-gray-600">スライドの見た目とスタイルを決めましょう</p></div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <div><Label className="text-sm font-medium">デザインスタイル</Label><Select value={formData.designStyle} onValueChange={(value) => handleInputChange("designStyle", value)}><SelectTrigger className="mt-1"><SelectValue placeholder="スタイルを選択" /></SelectTrigger><SelectContent><SelectItem value="シンプル">シンプル</SelectItem> <SelectItem value="モダン">モダン</SelectItem><SelectItem value="ビジネス">ビジネス</SelectItem> <SelectItem value="クリエイティブ">クリエイティブ</SelectItem></SelectContent></Select></div>
-                <div><Label className="text-sm font-medium">トーン</Label><Select value={formData.tone} onValueChange={(value) => handleInputChange("tone", value)}><SelectTrigger className="mt-1"><SelectValue placeholder="トーンを選択" /></SelectTrigger><SelectContent><SelectItem value="フォーマル">フォーマル</SelectItem> <SelectItem value="カジュアル">カジュアル</SelectItem><SelectItem value="エネルギッシュ">エネルギッシュ</SelectItem> <SelectItem value="エレガント">エレガント</SelectItem></SelectContent></Select></div>
-                <div><Label className="text-sm font-medium flex items-center gap-2"><Type className="w-4 h-4" />フォント</Label><Select value={formData.fontStyle} onValueChange={(value) => handleInputChange("fontStyle", value)}><SelectTrigger className="mt-1"><SelectValue placeholder="フォントを選択" /></SelectTrigger><SelectContent><SelectItem value="メイリオ">メイリオ</SelectItem> <SelectItem value="Meiryo UI">Meiryo UI</SelectItem><SelectItem value="遊ゴシック">遊ゴシック</SelectItem> <SelectItem value="Yu Gothic UI">Yu Gothic UI</SelectItem></SelectContent></Select></div>
-              </div>
-              <div className="space-y-2">
-                <Label className="text-sm font-medium">プレビュー</Label>
-                <div className="w-full h-48 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50">
+            <div className="grid grid-cols-2 gap-6">
+              <div><Label className="text-sm font-medium">デザインスタイル</Label><Select value={formData.designStyle} onValueChange={(value) => handleInputChange("designStyle", value)}><SelectTrigger className="mt-1"><SelectValue placeholder="スタイルを選択" /></SelectTrigger><SelectContent><SelectItem value="シンプル">シンプル</SelectItem> <SelectItem value="モダン">モダン</SelectItem><SelectItem value="ビジネス">ビジネス</SelectItem> <SelectItem value="クリエイティブ">クリエイティブ</SelectItem></SelectContent></Select></div>
+              <div><Label className="text-sm font-medium">トーン</Label><Select value={formData.tone} onValueChange={(value) => handleInputChange("tone", value)}><SelectTrigger className="mt-1"><SelectValue placeholder="トーンを選択" /></SelectTrigger><SelectContent><SelectItem value="フォーマル">フォーマル</SelectItem> <SelectItem value="カジュアル">カジュアル</SelectItem><SelectItem value="エネルギッシュ">エネルギッシュ</SelectItem> <SelectItem value="エレガント">エレガント</SelectItem></SelectContent></Select></div>
+            </div>
+            <div className="mt-6">
+              <Label className="text-sm font-medium">プレビュー <span className="text-xs text-gray-500 font-normal">※あくまでイメージ画像なので、実際の生成結果と異なる場合があります。</span></Label>
+              <div className="mx-auto" style={{ maxWidth: '600px', width: '100%' }}>
+                <div className="h-80 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50 mt-2">
                   {previewImageUrl ? (
                     <img src={previewImageUrl} alt="デザインプレビュー" className="max-w-full max-h-full object-contain" />
                   ) : (
                     <p className="text-gray-500 text-sm px-4 text-center">スタイルとトーンを選択するとプレビューが表示されます</p>
                   )}
                 </div>
+              </div>
+            </div>
+            <div className="mt-6">
+              <Label className="text-sm font-medium flex items-center gap-2"><Type className="w-4 h-4" />フォント <span className="text-xs text-gray-500 font-normal">※使用するスライド生成ツールにより、フォントにばらつきが生じる可能性があります。</span></Label>
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-6 mt-2">
+                {[
+                  { label: "メイリオ", value: "メイリオ", style: { fontFamily: "Meiryo, メイリオ, sans-serif" } },
+                  { label: "Meiryo UI", value: "Meiryo UI", style: { fontFamily: "Meiryo UI, sans-serif" } },
+                  { label: "遊ゴシック", value: "遊ゴシック", style: { fontFamily: "'Yu Gothic', '游ゴシック', YuGothic, sans-serif" } },
+                  { label: "Yu Gothic UI", value: "Yu Gothic UI", style: { fontFamily: "Yu Gothic UI, sans-serif" } },
+                ].map(font => (
+                  <button
+                    key={font.value}
+                    type="button"
+                    onClick={() => handleInputChange("fontStyle", font.value)}
+                    className={`border-2 rounded-lg w-full p-4 flex flex-col items-center transition-all ${formData.fontStyle === font.value ? "border-gray-800 shadow-lg" : "border-gray-300"} hover:border-purple-400 bg-white`}
+                  >
+                    <span style={{ ...font.style, fontSize: "2.5rem", lineHeight: "1" }}>あア亜</span>
+                    <span className="mt-2 text-sm text-gray-700">{font.label}</span>
+                  </button>
+                ))}
               </div>
             </div>
             <div className="space-y-4 pt-4">
