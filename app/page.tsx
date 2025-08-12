@@ -90,7 +90,12 @@ export default function SlidePromptGenerator() {
   ];
 
   const handleInputChange = (field: keyof FormData, value: string | number) => {
-    setFormData((prev) => ({ ...prev, [field]: value }))
+    console.log('handleInputChange called:', { field, value, type: typeof value });
+    setFormData((prev) => {
+      const newData = { ...prev, [field]: value };
+      console.log('New form data:', newData);
+      return newData;
+    });
   };
 
   const handleCopy = async () => {
@@ -246,6 +251,31 @@ export default function SlidePromptGenerator() {
                         )}
                     </CardContent>
                 </Card>
+                
+                {/* スライド生成ツールへのリンクカード */}
+                <Card className="mt-6">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Presentation className="w-5 h-5" />
+                      スライド生成はこちら
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                                        <div className="space-y-3">
+                      <a 
+                        href="https://www.genspark.ai/agents?type=slides_agent" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="block p-3 border border-gray-200 rounded-lg hover:border-purple-300 hover:bg-purple-50 transition-colors"
+                      >
+                        <span className="font-medium text-purple-600">Genspark</span>
+                      </a>
+                    </div>
+                      <p className="text-xs text-red-600 mt-3 font-medium">
+                        ※無課金のアカウントは機密情報の取り扱いに注意してください
+                      </p>
+                    </CardContent>
+                  </Card>
               </>
             )}
           </div>
@@ -254,10 +284,20 @@ export default function SlidePromptGenerator() {
   }
 
   const isNextDisabled = () => {
-    if (currentStep === 0) return !formData.slideTheme;
-    if (currentStep === 1) return !formData.audience || !formData.purpose || !formData.keyMessage;
-    if (currentStep === 2) return !formData.designStyle || !formData.tone || !formData.mainColor || !formData.subColor;
-    return true;
+    const disabled = currentStep === 0 ? !formData.slideTheme : 
+                   currentStep === 1 ? !formData.audience || !formData.purpose || !formData.keyMessage :
+                   currentStep === 2 ? !formData.designStyle || !formData.tone || !formData.mainColor || !formData.subColor :
+                   true;
+    
+    console.log('Debug info:', {
+      currentStep,
+      formData,
+      disabled,
+      slideTheme: formData.slideTheme,
+      slideThemeLength: formData.slideTheme?.length
+    });
+    
+    return disabled;
   }
 
   return (
@@ -271,7 +311,14 @@ export default function SlidePromptGenerator() {
             <div className="flex justify-between mt-8">
               <Button variant="outline" onClick={() => setCurrentStep(Math.max(0, currentStep - 1))} disabled={currentStep === 0 || currentStep === 3} className="px-6">戻る</Button>
               {currentStep < 2 ? (
-                  <Button onClick={() => setCurrentStep(currentStep + 1)} disabled={isNextDisabled()} className="px-6 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600">次へ</Button>
+                  <Button 
+                    onClick={() => setCurrentStep(currentStep + 1)} 
+                    disabled={isNextDisabled()} 
+                    className="px-6 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+                    title={`Debug: slideTheme="${formData.slideTheme}", disabled=${isNextDisabled()}`}
+                  >
+                    次へ
+                  </Button>
               ) : currentStep === 2 ? (
                   <Button onClick={generatePrompt} disabled={isNextDisabled() || isGenerating} className="px-6 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600">{isGenerating ? '生成中...' : "プロンプト生成"}</Button>
               ) : null}
