@@ -270,6 +270,23 @@ export default function SlidePromptGenerator() {
                       >
                         <span className="font-medium text-purple-600">Genspark</span>
                       </a>
+                      <a 
+                        href="https://manus.im/app" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="block p-3 border border-gray-200 rounded-lg hover:border-purple-300 hover:bg-purple-50 transition-colors"
+                      >
+                        <span className="font-medium text-purple-600">Manus</span>
+                      </a>
+                    </div>
+                    
+                    {/* 比較表画像 */}
+                    <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+                      <img 
+                        src="/manus-genspark-comparison.png" 
+                        alt="ManusとGensparkの比較表" 
+                        className="w-full max-w-full h-auto rounded-lg shadow-sm"
+                      />
                     </div>
                       <p className="text-xs text-red-600 mt-3 font-medium">
                         ※無課金のアカウントは機密情報の取り扱いに注意してください
